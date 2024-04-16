@@ -1,40 +1,34 @@
-package application;
+package operator;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
+
 
 import db.DB;
 
-public class RecuperarProntuario {
+public class ExibirProntuario {
 
 	public static void main(String[] args) {
 		Connection conn = null;
-		Statement st = null;
+		PreparedStatement pst = null;
 		ResultSet rs = null;
-		Statement ps = null;
-		ResultSet pg = null;
+
 
 		try {
-			// mutavel futuramente
-			// int idPaciente = sc.nextInt();
-			int idProntuario = 1;
-			int idPaciente = 1;
-			// conexao com o db
+			int idProntuarioASerExibido = 1;
+			
 			conn = DB.getConnection();
 
-			// query para prontuario
-			st = conn.createStatement();
-			rs = st.executeQuery("SELECT * FROM prontuarios WHERE Id=" + idProntuario);
 
-			// query para nome do paciente
-			ps = conn.createStatement();
-			pg = ps.executeQuery("SELECT Nome FROM pacientes WHERE Id=" + idPaciente);
-
-			while (rs.next() && pg.next()) {
+			pst = conn.prepareStatement("SELECT * FROM prontuarios WHERE Id=?");
+			pst.setInt(1, idProntuarioASerExibido);
+			
+			rs = pst.executeQuery();
+			
+			while (rs.next()) {
 				System.out.println("{");
-				System.out.println("  \"NomePaciente\": " + pg.getString("Nome") + ",");
 				System.out.println("  \"PacienteID\": " + rs.getInt("PacienteID") + ",");
 				System.out.println("  \"Queixas\": \"" + rs.getString("Queixas") + "\",");
 				System.out.println("  \"Diagnostico\": \"" + rs.getString("Diagnostico") + "\",");
@@ -46,8 +40,7 @@ public class RecuperarProntuario {
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
 		} finally {
-			// encerrando conexao com o db
-			DB.closeStatement(st);
+			DB.closeStatement(pst);
 			DB.closeResultSet(rs);
 			DB.closeConnection();
 		}
