@@ -10,6 +10,8 @@
 
 #db Log
 *.db.properties
+db.properties
+*db.properties
 
 # BlueJ files
 *.ctxt
