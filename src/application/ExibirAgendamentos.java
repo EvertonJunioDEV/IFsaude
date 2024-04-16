@@ -4,9 +4,8 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-
 import db.DB;
-import db.DbException;
+
 
 public class ExibirAgendamentos {
 	public static void main(String[] args) {
@@ -17,13 +16,18 @@ public class ExibirAgendamentos {
 		ResultSet pg = null;
 		
 		try {
+			//mutavel futuramente
+			//int idPaciente = sc.nextInt();
 			int idPaciente = 1;
+			
+			//conexao com o db
 			conn = DB.getConnection();
 			
+			//query para retornar agendamentos
 			st = conn.createStatement();
 			rs = st.executeQuery("SELECT * FROM agendamentos WHERE Id="+idPaciente);
 			
-			//search paciente nome
+			//prcurando paciente pelo nome
 			ps = conn.createStatement();
 			pg = ps.executeQuery("SELECT Nome FROM pacientes WHERE Id="+idPaciente);
 			
@@ -40,6 +44,7 @@ public class ExibirAgendamentos {
 		}catch (SQLException e) {
 			System.out.println(e.getMessage());
 		}finally {
+			//encerrando conexão com o db
 			DB.closeConnection();
 			DB.closeResultSet(rs);
 			DB.closeStatement(st);

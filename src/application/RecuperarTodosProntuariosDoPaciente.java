@@ -7,22 +7,27 @@ import java.sql.Statement;
 
 import db.DB;
 
-public class ExibirProntuario {
+public class RecuperarTodosProntuariosDoPaciente {
 	public static void main(String[] args) {
 		Connection conn = null;
 		Statement st = null;
 		ResultSet rs = null;
 		Statement ps = null;
 		ResultSet pg = null;
-		
+	
 		try {
+			//mutavel futuramente
+			//int idPaciente = sc.nextInt();
 			int idPaciente = 1;
+			
+			//conexao com o db
 			conn = DB.getConnection();
 			
+			//query para prontuario
 			st = conn.createStatement();
 			rs = st.executeQuery("SELECT * FROM prontuarios WHERE Id="+idPaciente);
 			
-			//searching paciente nome
+			//query para nome do paciente
 			ps = conn.createStatement();
 			pg = ps.executeQuery("SELECT Nome FROM pacientes WHERE Id="+idPaciente);
 			
@@ -40,6 +45,7 @@ public class ExibirProntuario {
 		}catch (SQLException e) {
 			System.out.println(e.getMessage());
 		}finally {
+			//encerrando conexao com o db
 			DB.closeStatement(st);
 			DB.closeResultSet(rs);
 			DB.closeConnection();
